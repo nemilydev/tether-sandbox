@@ -3,7 +3,7 @@
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories/)
 [![Validate](https://github.com/nemilydev/tether/actions/workflows/validate.yml/badge.svg)](https://github.com/nemilydev/tether/actions/workflows/validate.yml)
 [![Version](https://img.shields.io/github/v/release/nemilydev/tether)](https://github.com/nemilydev/tether/releases/latest)
-[![Downloads](https://img.shields.io/badge/Downloads-Total%20downloads-FFD33D?style=for-the-badge&labelColor=1e1e1e&color=F5B700)](https://github.com/nemilydev/tether/releases)
+[![Downloads](https://img.shields.io/badge/Downloads-Total%20downloads-FFD33D?style=for-the-badge&labelColor=181d28)](https://github.com/nemilydev/tether/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/nemilydev/tether?tab=MIT-1-ov-file)
 
 A Home Assistant integration for controlling Lovense toys, either directly over your local network or through the Lovense Standard API.
