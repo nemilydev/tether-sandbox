@@ -32,10 +32,14 @@ def toy_device_identifier(entry_id: str, toy_id: str) -> str:
 def hub_device_id(hass: HomeAssistant, entry_id: str) -> str | None:
     """Return the device registry id of the hub device for one config entry.
 
-    Returns ``None`` when the hub device is not (yet) registered; callers
-    should omit ``via_device_id`` in that case rather than crash.
+    Returns ``None`` when the hub device is not (yet) registered or the
+    lookup itself fails; callers should omit ``via_device_id`` in that
+    case rather than crash.
     """
-    device = dr.async_get(hass).async_get_device(identifiers={(DOMAIN, entry_id)})
+    try:
+        device = dr.async_get(hass).async_get_device(identifiers={(DOMAIN, entry_id)})
+    except Exception:
+        return None
     return device.id if device else None
 
 
