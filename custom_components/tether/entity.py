@@ -4,8 +4,8 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import Any
 
-from homeassistant.core import callback
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.device_registry import DeviceInfo, dr
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import UNDEFINED, UndefinedType
@@ -26,6 +26,16 @@ type EntityFactories = Mapping[str, Callable[[], Entity]]
 def toy_device_identifier(entry_id: str, toy_id: str) -> str:
     """Return the device registry identifier of a toy within one config entry."""
     return f"{entry_id}_{toy_id}"
+
+
+def hub_device_id(hass: HomeAssistant, entry_id: str) -> str | None:
+    """Return the device registry id of the hub device for one config entry.
+
+    Returns ``None`` when the hub device is not (yet) registered; callers
+    should omit ``via_device_id`` in that case rather than crash.
+    """
+    device = dr.async_get(hass).async_get_device(identifiers={(DOMAIN, entry_id)})
+    return device.id if device else None
 
 
 @callback
@@ -79,13 +89,16 @@ class TetherEntity(CoordinatorEntity[LovenseCoordinator]):
             translation_key = key
         if translation_key is not None:
             self._attr_translation_key = translation_key
+        device_info_kwargs: dict[str, Any] = {}
+        if hub := hub_device_id(self.coordinator.hass, entry_id):
+            device_info_kwargs["via_device_id"] = hub
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, toy_device_identifier(entry_id, toy_id))},
-            via_device=(DOMAIN, entry_id),
             name=format_device_name(toy_info),
             manufacturer="Lovense",
             model=str(toy_info.get("name") or "Unknown"),
             sw_version=get_device_version(toy_info),
+            **device_info_kwargs,
         )
 
     @property
