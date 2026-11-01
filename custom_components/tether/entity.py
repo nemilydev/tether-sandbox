@@ -82,7 +82,9 @@ class TetherEntity(CoordinatorEntity[LovenseCoordinator]):
             self._attr_translation_key = translation_key
 
         device_registry = dr.async_get(coordinator.hass)
-        parent_device = device_registry.async_get_device(identifiers={(DOMAIN, entry_id)})
+        parent_device = device_registry.async_get_device_by_identifier(
+        (DOMAIN, entry_id), entry_id
+)
         if parent_device is None:
             parent_device = device_registry.async_get_or_create(
                 config_entry_id=entry_id,
