@@ -24,6 +24,7 @@ from homeassistant.util.yaml import load_yaml_dict
 from custom_components.tether.const import API_COMMAND_SERVER, DOMAIN
 from custom_components.tether.coordinator import active_coordinator, connection_store
 from custom_components.tether.diagnostics import async_get_config_entry_diagnostics
+from custom_components.tether.entity import TetherEntity
 
 from .conftest import (
     LOCAL_DATA,
@@ -90,6 +91,33 @@ async def test_setup_creates_toy_entities(
     assert toy_device.manufacturer == "Lovense"
     # Toys without Pump or Thrusting do not get those controls.
     assert registry.async_get_entity_id("light", DOMAIN, f"{local_entry.entry_id}_{TOY_ID}_pump") is None
+
+
+@pytest.mark.parametrize("hub_state", ["present", "missing", "lookup_error"])
+async def test_toy_device_info_hub_link(
+    hass: HomeAssistant,
+    local_entry: MockConfigEntry,
+    mock_local_api: AiohttpClientMocker,
+    hub_state: str,
+) -> None:
+    await _setup(hass, local_entry)
+    devices = dr.async_get(hass)
+    hub = devices.async_get_device(identifiers={(DOMAIN, local_entry.entry_id)})
+    assert hub is not None
+
+    with patch.object(
+        devices,
+        "async_get_device",
+        return_value=hub if hub_state == "present" else None,
+        side_effect=RuntimeError("Registry lookup failed") if hub_state == "lookup_error" else None,
+    ):
+        entity = TetherEntity(local_entry.runtime_data, TOY_ID, toy(), "battery")
+
+    assert "via_device_id" not in entity.device_info
+    if hub_state == "present":
+        assert entity.device_info["via_device"] == (DOMAIN, local_entry.entry_id)
+    else:
+        assert "via_device" not in entity.device_info
 
 
 @pytest.mark.parametrize(

@@ -33,7 +33,7 @@ def hub_device_id(hass: HomeAssistant, entry_id: str) -> str | None:
     """Return the device registry id of the hub device for one config entry.
 
     Returns ``None`` when the hub device is not (yet) registered or the
-    lookup itself fails; callers should omit ``via_device_id`` in that
+    lookup itself fails; callers should omit ``via_device`` in that
     case rather than crash.
     """
     try:
@@ -95,8 +95,8 @@ class TetherEntity(CoordinatorEntity[LovenseCoordinator]):
         if translation_key is not None:
             self._attr_translation_key = translation_key
         device_info_kwargs: dict[str, Any] = {}
-        if hub := hub_device_id(self.coordinator.hass, entry_id):
-            device_info_kwargs["via_device_id"] = hub
+        if hub_device_id(self.coordinator.hass, entry_id):
+            device_info_kwargs["via_device"] = (DOMAIN, entry_id)
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, toy_device_identifier(entry_id, toy_id))},
             name=format_device_name(toy_info),
