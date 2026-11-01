@@ -82,9 +82,13 @@ async def test_setup_creates_toy_entities(
         assert entry.entity_category == "diagnostic"
 
     devices = dr.async_get(hass)
-    hub = devices.async_get_device(identifiers={(DOMAIN, local_entry.entry_id)})
-    toy_device = devices.async_get_device(
-        identifiers={(DOMAIN, f"{local_entry.entry_id}_{TOY_ID}")}
+    hub = devices.async_get_device_by_identifier(
+        (DOMAIN, local_entry.entry_id),
+        local_entry.entry_id,
+    )
+    toy_device = devices.async_get_device_by_identifier(
+        (DOMAIN, f"{local_entry.entry_id}_{TOY_ID}"),
+        local_entry.entry_id,
     )
     assert toy_device.via_device_id == hub.id
     assert toy_device.manufacturer == "Lovense"
