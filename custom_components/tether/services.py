@@ -127,7 +127,7 @@ async def _resolve_targets(
     entity_registry = er.async_get(hass)
     device_registry = dr.async_get(hass)
     resolved: dict[tuple[str, str], tuple[LovenseCoordinator, str]] = {}
-    for entity_id in await async_extract_entity_ids(hass, call):
+    for entity_id in await async_extract_entity_ids(call):
         entity = entity_registry.async_get(entity_id)
         if entity is None or entity.platform != DOMAIN:
             continue
