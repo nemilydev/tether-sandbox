@@ -4,7 +4,6 @@
 [![Validate](https://github.com/nemilydev/tether/actions/workflows/validate.yml/badge.svg)](https://github.com/nemilydev/tether/actions/workflows/validate.yml)
 [![Version](https://img.shields.io/github/v/release/nemilydev/tether)](https://github.com/nemilydev/tether/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/nemilydev/tether/total?style=for-the-badge)](https://github.com/nemilydev/tether/releases)
-![Downloads](https://img.shields.io/github/downloads/nemilydev/tether/total?style=for-the-badge&label=Downloads)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/nemilydev/tether?tab=MIT-1-ov-file)
 
 A Home Assistant integration for controlling Lovense toys, either directly over your local network or through the Lovense Standard API.
