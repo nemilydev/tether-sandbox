@@ -81,7 +81,7 @@ class TetherEntity(CoordinatorEntity[LovenseCoordinator]):
             self._attr_translation_key = translation_key
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, toy_device_identifier(entry_id, toy_id))},
-            via_device_id=(DOMAIN, entry_id),
+            via_device=(DOMAIN, entry_id),
             name=format_device_name(toy_info),
             manufacturer="Lovense",
             model=str(toy_info.get("name") or "Unknown"),
